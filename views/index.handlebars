@@ -1,0 +1,26 @@
+<div class="bg-light p-5 rounded-lg m-3">
+    <h1 class="display-4">Bem vindo ao BlogApp</h1>
+    <p class="lead">Este é um simples blog que foi criado usando node</p>
+    <hr class="my-4">
+    <p>Você pode também criar uma conta</p>
+    <a class="btn btn-primary btn-lg" href="#" role="button">Crie sua conta!</a>
+</div>
+<hr>
+<h2>Postagens recentes</h2>
+
+{{#each postagens}}
+<div class="card mt-4">
+    <div class="card-body">
+
+        <h3>{{titulo}}</h3>
+        <p>{{descricao}}</p>
+        <a href="/postagem/{{slug}}"><button class="btn btn-success">Leia Mais...</button></a>
+        <hr>
+        <small >Categoria: {{categoria.nome}}</small> <br>
+        <small>Data de publicação: {{data}}</small>
+        
+    </div>
+</div>
+{{else}}
+<h5>Nenhuma postagem!</h5>
+{{/each}}
