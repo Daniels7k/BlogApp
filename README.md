@@ -18,6 +18,7 @@ Um blog simples que permite a adição de postagens feitas somente pelo admin, c
 -   [ ] MongoDB
 -   [ ] Express-Session
 -   [ ] Cookie-Parser 
+-   [ ] Bootstrap
 
 ## Iniciando o Projeto
 Utilize o yarn ou o npm install para instalar as dependências do projeto.
