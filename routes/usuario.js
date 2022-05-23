@@ -106,16 +106,32 @@ router.post("/login", async(req, res) => {
                 res.redirect("/usuarios/login")
             } else {
                 //Criando token de autorização e armazenando em um cookie
-                const token = jwt.sign({ id: usuario.id, admin: usuario.admin }, segredo)
+                const token = jwt.sign({ id: usuario.id, admin: usuario.admin, nome: usuario.nome }, segredo)
                 res.cookie("authorizathionToken", token) 
                 req.flash("success_msg", "Logado com sucesso!")
                 res.redirect("/")
             }
+        }).catch((error) => {
+            console.log(error)
         })
     }).catch((error) => {
         req.flash("error_msg", "Houve um erro interno!")
         res.redirect("/usuarios/login")
     })
+})
+
+//Logout 
+
+router.get( "/logout", (req, res) => {
+    var cookie = req.cookies;
+    for (var prop in cookie) {
+        if (!cookie.hasOwnProperty(prop)) {
+            continue;
+        }
+        res.cookie(prop, '', { expires: new Date(0) });
+    }
+    req.flash("success_msg", "Logout feito com sucesso!")
+    res.redirect('/');
 })
 
 router.get("/cookie", (req, res) => {

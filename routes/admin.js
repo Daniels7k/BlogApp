@@ -6,11 +6,12 @@ require("../models/Categoria")
 const Categoria = mongoose.model("categorias")
 require("../models/Postagem")
 const Postagem = mongoose.model("postagens")
+const getCookie = require("../helpers/cookie")
 //Rotas
 //Get
 
 //Categorias
-router.get("/", (req, res) => {
+router.get("/", getCookie.getCookie, (req, res) => {
     res.render("admin/index")
 })
 
@@ -18,7 +19,7 @@ router.get("/posts", (req, res) => {
     res.send("Página de posts")
 })
 
-router.get("/categorias", (req, res) => {
+router.get("/categorias", getCookie.getCookie, (req, res) => {
     //Buscando dados para renderizar no Handlebars
     Categoria.find().then((categorias) => {
         res.render("admin/categorias", { categorias })
@@ -29,11 +30,11 @@ router.get("/categorias", (req, res) => {
 
 })
 
-router.get("/categorias/add", (req, res) => {
+router.get("/categorias/add", getCookie.getCookie, (req, res) => {
     res.render("admin/addCategorias")
 })
 
-router.get("/categorias/edit/:id", (req, res) => {
+router.get("/categorias/edit/:id",  getCookie.getCookie, (req, res) => {
     //Buscando dados pelo ID
     Categoria.findOne({ _id: req.params.id }).then((categoria) => {
         res.render("admin/editCategorias", { categoria })
@@ -47,7 +48,7 @@ router.get("/categorias/edit/:id", (req, res) => {
 
 
 //Postagens
-router.get("/postagens", (req, res) => {
+router.get("/postagens", getCookie.getCookie, (req, res) => {
     //Renderizando postagens
     Postagem.find().populate("categoria").sort({ data: "desc" }).then((postagens) => {
         res.render("admin/postagens", { postagens })
@@ -58,7 +59,7 @@ router.get("/postagens", (req, res) => {
 
 })
 
-router.get("/postagens/add", (req, res) => {
+router.get("/postagens/add", getCookie.getCookie, (req, res) => {
     //Renderizando formulario de postagens
     Categoria.find().then((categoria) => {
         res.render("admin/addPostagem", { categoria })
@@ -69,7 +70,7 @@ router.get("/postagens/add", (req, res) => {
 
 })
 
-router.get("/postagens/edit/:id", (req, res) => {
+router.get("/postagens/edit/:id", getCookie.getCookie, (req, res) => {
 
     Postagem.findOne({ _id: req.params.id }).then((postagens) => {
 
@@ -88,7 +89,7 @@ router.get("/postagens/edit/:id", (req, res) => {
 
 })
 
-router.get("/postagens/deletar/:id", (req, res) => {
+router.get("/postagens/deletar/:id", getCookie.getCookie, (req, res) => {
     //Deletando postagem do banco de dados
     Postagem.deleteOne({_id: req.params.id}).then(() => {
         req.flash("success_msg", "Postagem deletada com sucesso!")

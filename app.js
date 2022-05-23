@@ -15,6 +15,7 @@ const Categoria = mongoose.model("categorias")
 const usuarios = require("./routes/usuario")
 const authUser = require("./helpers/authUser")
 const authAdmin = require("./helpers/authAdmin")
+const getUser = require("./helpers/cookie")
 
 //Configurações
 
@@ -62,7 +63,7 @@ mongoose.connect("mongodb+srv://curso:curso@cluster0.mv0re.mongodb.net/BlogAPP",
 app.use(express.static(path.join(__dirname, "public")))
 
 //Rotas
-app.get("/", (req, res) => {
+app.get("/", getUser.getCookie, (req, res) => {
     //Renderizando postagens para a pagina principal
     Postagem.find().populate("categoria").sort({ data: "desc" }).then((postagens) => {
         res.render("index", { postagens })
@@ -73,7 +74,7 @@ app.get("/", (req, res) => {
 
 })
 
-app.get("/postagem/:slug", (req, res) => {
+app.get("/postagem/:slug", getUser.getCookie, (req, res) => {
     //Procurando a postagem no banco de dados
     Postagem.findOne({ slug: req.params.slug }).then((postagem) => {
         if (postagem) {
@@ -88,7 +89,7 @@ app.get("/postagem/:slug", (req, res) => {
     })
 })
 
-app.get("/categorias", (req, res) => {
+app.get("/categorias", getUser.getCookie, (req, res) => {
     Categoria.find().then((categorias) => {
         res.render("categorias/index", { categorias })
     }).catch((error) => {
@@ -96,7 +97,7 @@ app.get("/categorias", (req, res) => {
         res.redirect("/")
     })
 })
-app.get("/categorias/:slug", (req, res) => {
+app.get("/categorias/:slug", getUser.getCookie, (req, res) => {
     Categoria.findOne({ slug: req.params.slug }).then((categoria) => {
         if (categoria) {
             Postagem.find({ categoria: categoria._id }).then((postagens) => {
@@ -120,9 +121,9 @@ app.get("/404", (req, res) => {
 })
 
 //Routes
-app.use("/admin", authUser, authAdmin, adminRoute,)
+app.use("/admin",  authUser, authAdmin, adminRoute, getUser.getCookie,)
 
-app.use("/usuarios", usuarios)
+app.use("/usuarios", getUser.getCookie, usuarios)
 
 //Outros
 const PORT = 3000;

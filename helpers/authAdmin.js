@@ -1,6 +1,7 @@
 module.exports =
     function (req, res, next) {
         if (req.user.admin) {
+            res.locals.user = req.user.nome
             next()
         }
         else {
